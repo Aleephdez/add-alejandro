@@ -98,7 +98,7 @@ ltsp dnsmasq --proxy-dhcp=0
 
 Iniciamos la máquina cliente:
 
-   ![](img/15.png)
+   ![](img/16.png)
 
 Creamos una segunda MV Cliente y la iniciamos. En el siguiente enlace se puede ver el funcionamiento de la práctica:
 
