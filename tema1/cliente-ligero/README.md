@@ -96,7 +96,7 @@ ltsp dnsmasq --proxy-dhcp=0
 
     ![](img/11.png)
 
-Iniciamos la máquina cliente:
+Iniciamos la máquina cliente: (A la dereha vemos la máquina servidor y a la izquierda la máquina cliente)
 
    ![](img/16.png)
 
