@@ -96,10 +96,12 @@ ltsp dnsmasq --proxy-dhcp=0
 
     ![](img/11.png)
 
-Iniciamos la máquina cliente: (A la dereha vemos la máquina servidor y a la izquierda la máquina cliente)
+Iniciamos la máquina cliente: 
+
+(A la izquierda vemos la máquina servidor y a la derecha la máquina cliente)
 
    ![](img/16.png)
 
-Creamos una segunda MV Cliente y la iniciamos. En el siguiente enlace se puede ver el funcionamiento de la práctica:
+Creamos una segunda MV Cliente con las mismas características que la anterior y la iniciamos. En el siguiente enlace se puede ver el funcionamiento de la práctica:
 
 [Enlace a vídeo](https://www.youtube.com/watch?v=be2cAv7GCtQ) 
