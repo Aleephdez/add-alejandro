@@ -1,8 +1,8 @@
- # 0. Introducción VNC
+ # Introducción VNC
 
 VNC o Computación Virtual en Red es un software libre que permite crear un entorno cliente-servidor de forma que el cliente pueda ver y controlar la máquina servidor de forma remota. Es posible hacerlo incluso entre máquinas con SSOO distinto, como veremos a continuación. En esta práctica vamos a utilizar 4 máquinas distintas, dos máquinas Windows y dos máquinas OpenSuse. En mi caso, he utilizado dos máquinas reales con Windows 11 y Windows 10 (mi portátil y el sobremesa de un familiar) ya que las máquinas virtuales con Windows iban extremadamente mal en VirtualBox.
 
-## 0.2 Configuraciones
+## Configuraciones
 
 Vamos a montar un entorno como el siguiente: 
 
@@ -30,7 +30,7 @@ Vamos a montar un entorno como el siguiente:
 * En caso de errores, revisar el cortafuegos de Windows.
 
 
-## 1.2 Ir a una máquina con GNU/Linux
+## 1.1 Ir a una máquina con GNU/Linux
 
 * Ejecutamos `nmap -Pn 192.168.1.49`, desde la máquina real para comprobar
 que los servicios son visibles desde fuera de la máquina VNC-SERVER. Vemos que VNC está escuchando desde los puertos 5800 y 5900:
