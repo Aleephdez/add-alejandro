@@ -17,7 +17,7 @@ Vamos a montar un entorno como el siguiente:
 
 # 1. Windows: Slave VNC
 
-* Descargarmos `TightVNC` desde la página oficial.
+* Descargamos `TightVNC` desde la página oficial.
 * En el servidor VNC, es decir, la MV Windows 11 instalaremos `TightVNC -> Custom -> Server`. Esto es el servicio.
 
 ![](img/3.png)
