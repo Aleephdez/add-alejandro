@@ -96,12 +96,12 @@ ltsp dnsmasq --proxy-dhcp=0
 
     ![](img/11.png)
 
-Al iniciar la máquina cliente, aparece este mensaje de error:
-  
-![](img/14.png)
+Iniciamos la máquina cliente: 
 
-He tratado de solucionarlo pero no lo he conseguido. Buscando en internet no he encontrado ninguna solución. He rehecho la práctica entera paso por paso con 3 máquinas servidores distintas y he probado con varias máquinas clientes con distintas configuraciones y no ha funcionado. En uno de esos 3 intentos, he ido haciéndolo con un compañero (que ha hecho la práctica y le ha ido bien) paso a paso, siguiendo su mismo procedimiento y, aún así, sigue saliendo el mismo mensaje de error.
+(A la izquierda vemos la máquina servidor y a la derecha la máquina cliente)
 
-Además, también le he pedido a ese mismo compañero (que sí ha conseguido terminar la práctica) su MV server, por si mi error está a la hora de configurar dicha máquina y, de nuevo, salta el mismo error. Estoy usando la misma iso de Ubuntu que él, misma configuración de las máquinas y, aún así, a mi me sigue dando error. Adjunto un vídeo donde utilizo su MV server y se ve el error:
+   ![](img/16.png)
 
-[Enlace a vídeo](https://www.youtube.com/watch?v=edMlcBp0ioM) 
+Creamos una segunda MV Cliente con las mismas características que la anterior y la iniciamos. En el siguiente enlace se puede ver el funcionamiento de la práctica:
+
+[Enlace a vídeo](https://www.youtube.com/watch?v=be2cAv7GCtQ) 
