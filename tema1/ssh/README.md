@@ -1,9 +1,6 @@
 ```
-Cursos      : 202021, 201920, 201819, 201718, etc.
-Area        : Sistemas operativos, acceso remoto
-Descripción : Practicar con la herramienta de acceso remoto SSH
-Requisitos  : SO GNU/Linux y SO Windows
-Tiempo      : 8 sesiones
+Nombre      : Alejandro de Paz Hernández
+
 ```
 
 ---
@@ -11,19 +8,7 @@ Tiempo      : 8 sesiones
 ---
 ## Introducción
 
-* Atender a la explicación del profesor.
-* Leer documentación proporcionada por el profesor.
-
-Enlaces de interés:
-* [Aumentar la seguridad servidor SSH](http://rm-rf.es/como-securizar-un-servidor-ssh/)
-* [Hardening SSH](https://linux-audit.com/audit-and-harden-your-ssh-configuration)
-* http://en.wikipedia.org/wiki/: Secure_Shell,VNC, NX_technology, Remote_Desktop_Protocol, Remote_Desktop_Services, X_Window_System_protocols_and_architecture, Comparison_of_remote_desktop_software
-
-Entrega:
-* Añadir informe al repositorio git. Etiqueta `ssh`.
-* Incluir capturas de pantalla de cada apartado para confirmar que está funcionando.
-* Además se mostrará al profesor la práctica funcionando en clase y se responderá a las preguntas que pudieran hacerse en dicho instante.
-
+SSH es el nombre del protocolo y del programa que nos permite acceder de forma remota a una máquina por medio de un canal seguro en el que toda la información está cifrada. También permite copiar datos de forma segura, gestionar claves RSA y, en general, pasar datos y tráfico entre dos máquinas. En esta práctica, vamos a utilizar el SSH en dos entornos servidor-cliente, uno en Winodws y otro en OpenSuse.
 ---
 # 1. Preparativos
 
@@ -31,203 +16,157 @@ Vamos a necesitar las siguientes MVs:
 
 | Función | Sistema Operativo    | IP        | Hostname |
 | ------- |--------------------- | --------- | -------- |
-| Un servidor SSH | GNU/Linux OpenSUSE | 172.AA.XX.31 | serverXXg |
-| Un cliente SSH  | GNU/Linux OpenSUSE | 172.AA.XX.32 | clientXXg |
-| Un servidor SSH | Windows Server     | 172.AA.XX.11 | serverXXs |
-| Un cliente SSH  | Windows            | 172.AA.XX.12 | clientXXw |
+| Un servidor SSH | GNU/Linux OpenSUSE | 172.19.20.31 | server20g |
+| Un cliente SSH  | GNU/Linux OpenSUSE | 172.19.20.32 | cliente20g |
+| Un servidor SSH | Windows Server 2016  | 172.19.20.11 | server20s |
+| Un cliente SSH  | Windows            | 172.19.20.12 | cliente20w |
 
 ## 1.1 Servidor SSH
 
-* Configurar el servidor GNU/Linux con siguientes valores:
-    * SO GNU/Linux: OpenSUSE - Sin entorno gráfico.
-    * Nombre de equipo: `serverXXg`
-    * [Configuración de las MV's](../../global/configuracion/opensuse.md)
-    * Poner clave compleja al usuario root.
-* Añadir en `/etc/hosts` los equipos `clientXXg` y `clientXXw` (Donde XX es el puesto del alumno).
-* Para comprobar los cambios ejecutamos varios comandos. Capturar imagen:
-```
-ip a               # Comprobar IP, máscara y nombre interfaz de red
-ip route           # Comprobar puerta de enlace
-ping 8.8.4.4 -i 2  # Comprobar conectividad externa
-host www.nba.com   # Comprobar el servidor DNS
-ping clientXXg     # Comprobar conectividad con cliente GNU/Linux
-ping clientXXw     # Comprobar conectividad con cliente Windows
-lsblk              # Consultar particiones
-blkid              # Consultar UUID de la instalación
-```
+* Lo primero es crear nuestra primera máquina servidor con OpenSUSE. Básicamente, instalaremos un OpenSUSE Leap 15.4 sin entorno gráfico. Configuramos una IP estática (podemos usar yast aunque no tengamos entorno gráfico ejecutando `yast2`) y comprobamos:
 
-Crear los siguientes usuarios en `serverXXg`:
-* primer-apellido-del-alumno1
-* primer-apellido-del-alumno2
-* primer-apellido-del-alumno3
-* primer-apellido-del-alumno4
+![](img/1.png)
+
+* Añadimos en `/etc/hosts` los equipos `client20g` y `cliente20w` para no tener que escribir la IP completa cada vez que queremos conectarnos o realizar un ping a la máquina remota.
+
+![](img/2.png)
+
+* Antes de comprobar la conexión con la máquina Windows, tendremos que habilitar el recibo de paquetes ICMPv4 en el firewall en Windows:
+
+![](img/3.png)
+
+* Ahora sí, comprobamos con un ping que la conexión funciona tanto en el cliente OpenSUSE como en el cliente Windows:
+
+![](img/4.png)
+
+* Creamos los siguientes usuarios en `server20g` y le añadimos una contraseña a cada usuario:
+
+![](img/5.png)
+
 
 ## 1.2 Cliente GNU/Linux
 
-* Configurar el cliente1 GNU/Linux con los siguientes valores:
-    * SO OpenSUSE
-    * [Configuración de las MV's](../global/configuracion/opensuse.md)
-    * Nombre de equipo: `clientXXg`
-* Añadir en `/etc/hosts` los equipos serverXXg, y clientXXw.
-* Comprobar haciendo ping a ambos equipos.
+* Nos vamos a nuestra máquina cliente de OpenSUSE (la hemos creado con una configuración básica y con entorno gráfico) y añadimos en `/etc/hosts` los equipos server20g, y cliente20w. Una vez hecho esto, comprobamos la conexión a ambos equipos:
+
+![](img/6.png)
+
+![](img/7.png)
 
 ## 1.3 Cliente Windows
 
-* Instalar software cliente SSH en Windows. Para este ejemplo usaremos [PuTTY](http://www.putty.org/).
-* Configurar el cliente2 Windows con los siguientes valores:
-    * SO Windows
-    * Nombre de equipo: `clientXXw`
-    * [Configuración de las MV's](../../global/configuracion/windows.md)
-* Añadir en `C:\Windows\System32\drivers\etc\hosts` los equipos serverXXg y clientXXg.
-* Comprobar haciendo `ping` a ambos equipos.
+* En Windows, tendremos que instalar un cliente SSH ya que no tenemos uno por defecto. En este caso, utilizaremos PuTTy. Nos vamos a la página oficial y lo descargarmos e instalamos.
+
+![](img/8.png)
+
+* Al igual que en las otras máquinas, añadimos en `C:\Windows\System32\drivers\etc\hosts` los equipos server20g y cliente20g y comprobamos la conexión con `ping`:
+
+![](img/9.png)
+
+![](img/10.png)
+
 
 ---
 # 2 Instalación del servicio SSH en GNU/Linux
 
-* Instalar el servicio SSH en la máquina serverXXg. Por comandos o entorno gráfico.
+* En OpenSUSE tendremos el SSH instalado por defecto (si lo hemos seleccionado en la instalación del sistema). En caso contrario ejectuamos `sudo zypper install openssh`. Comprobamos que el servicio está activo:
 
-> Instalación de SSH:
->
-> * Desde la herramienta `yast -> Instalar Software`
-> * Desde terminal `zypper search openssh` muestra los paquetes instalados o no con nombre openssh*.
-> * Desde terminal `zypper install openssh`, instala el paquete OpenSSH.
->
-> Los ficheros de configuración del servicio SSH se guardan en /etc/ssh.
+![](img/11.png)
 
-## 2.1 Comprobación
+> Para activar el servicio, si no lo estuviera ejecutamos `systemctl enable sshd`.
 
-* Desde el propio servidor, verificar que el servicio está en ejecución.
-    * `systemctl status sshd`, esta es la forma habitual de comprobar los servicios.
-    * `ps -ef|grep sshd`, esta es otra forma de comprobarlo mirando los procesos del sistema.
+* Ejecutamos `sudo lsof -i:22 -Pn` para comprobar que el servicio está escuchando por el puerto 22.
 
-![servicio-sshd](./opensuse/servicio-sshd.png)
+![](img/12.png)
 
-![servicio-sshd-yast](./opensuse/servicio-sshd-yast.png)
+## 2.1 Primera conexión SSH desde cliente GNU/Linux
 
-> Para poner el servicio enable, si no lo estuviera.:
->  * `systemctl enable sshd` por comandos
->  * `Yast -> servicios` por entorno gráfico
+* Vamos al cliente `cliente20g`.
+* `ping server20g`, para comprobar la conectividad con el servidor.
+* `nmap -Pn server20g`, para comprobar los puertos abiertos en el servidor (SSH debe estar en estado `open`).
 
-* `sudo lsof -i:22 -Pn`, comprobar que el servicio está escuchando por el puerto 22.
+![](img/13.png)
 
-## 2.2 Primera conexión SSH desde cliente GNU/Linux
 
-* Ir al cliente `clientXXg`.
-* `ping serverXXg`, comprobar la conectividad con el servidor.
-* `nmap -Pn serverXXg`, comprobar los puertos abiertos en el servidor (SSH debe estar open). Debe mostrarnos que el puerto 22 está abierto. Debe aparecer una línea como  "22/tcp open ssh". Si esto falla, debemos comprobar en el servidor la configuración del cortafuegos.
+Vamos a comprobar el funcionamiento de la conexión SSH desde cada cliente usando el usuario *depaz1*.
+* Desde el cliente GNU/Linux nos conectamos mediante `ssh depaz1@server20g`. 
 
-![ssh-nmap](./opensuse/ssh-nmap.png)
+![](img/14.png)
 
-> Existe una herramienta gráfica para nmap, llamada nmapfe
+Vemos que en esta primera conexión, se añade al server20g como un host conocido. Si vamos ahora a `$HOME/.ssh/known_hosts` en el equipo cliente, vemos que la clave que aparece es la clave pública del servidor por lo que en el resto de conexiones al server20g no nos volverá a pedir confirmación
 
-Vamos a comprobar el funcionamiento de la conexión SSH desde cada cliente usando el usuario *1er-apellido-alumno1*.
-* Desde el cliente GNU/Linux nos conectamos mediante `ssh 1er-apellido-alumno1@serverXXg`. Capturar imagen del intercambio de claves que se produce en el primer proceso de conexión SSH.
+* Comprobamos lo anterior realizando la conexión nuevamente. Vemos que ahora solo nos pedirá la contraseña del usuario.
 
-![ssh-conexion1](./opensuse/ssh-conexion1.png)
+![](img/15.png)
 
-* A partir de ahora cuando nos volvamos a conectar sólo nos pide la contraseña:
+## 2.2 Primera conexión SSH desde cliente Windows
 
-![ssh-conexion2](./opensuse/ssh-conexion2.png)
+* Desde el cliente Windows (usando `PuTTY`) nos conectamos al servidor SSH de GNU/Linux. 
+![](img/16.png)
 
-* Comprobar contenido del fichero `$HOME/.ssh/known_hosts` en el equipo cliente. OJO el prompt nos indica en qué equipo estamos.
-* ¿Te suena la clave que aparece? Es la clave de pública de la máquina del servidor.
+* Al igual que en el cliente OpenSUSE, se producirá un intercambio de claves y se añadirá al server20g como host conocido:
 
-Una vez llegados a este punto deben de funcionar correctamente las conexiones SSH desde el cliente. Comprobarlo.
+![](img/17.png)
 
-## 2.3 Primera conexión SSH desde cliente Windows
-
-* Desde el cliente Windows (usando `PuTTY`) nos conectamos al servidor SSH de GNU/Linux.
-* Podremos ver el intercambio de claves que se produce en el primer proceso de conexión SSH. * ¿Te suena la clave que aparece? Es la clave de identificación de la máquina del servidor.
-* Guardar la identificación del servidor.
-* La siguiente vez que volvamos a usar PuTTY ya no debe aparecer el mensaje de advertencia porque hemos memorizado la identificación del servidor SSH. Comprobarlo.
+![](img/18.png)
 
 ---
 # 3. Cambiamos la identidad del servidor
 
-¿Qué pasaría si cambiamos la identidad del servidor?
-Esto es, ¿Y si cambiamos las claves del servidor? ¿Qué pasa?
+Vamos a ver qué ocurre si cambiamos la clave pública del server20g. Es decir, vamos a cambiar la clave pública que las otras máquinas están guardando en sus ficheros de *known_hosts*.
 
 * Los ficheros `ssh_host*key` y `ssh_host*key.pub`, son ficheros de clave pública/privada
-que identifican a nuestro servidor frente a nuestros clientes. Confirmar que existen
-el en `/etc/ssh`,:
+que identifican a nuestro servidor frente a nuestros clientes. Confirmamos que existen en `/etc/ssh` dentro de server20g:
 
-```
-david@server42g:~> cd /etc/ssh/
-david@server42g:/etc/ssh> vdir
-total 576
--rw-r--r-- 1 root root   2375 oct  1 08:15 ldap.conf
--rw------- 1 root root 535929 oct  1 08:15 moduli
--rw-r--r-- 1 root root   2586 oct  1 08:15 ssh_config
--rw-r----- 1 root root   3776 oct  1 08:15 sshd_config
--rw------- 1 root root    668 jun 28 09:55 ssh_host_dsa_key
--rw-r--r-- 1 root root    610 jun 28 09:55 ssh_host_dsa_key.pub
--rw------- 1 root root    227 jun 28 09:55 ssh_host_ecdsa_key
--rw-r--r-- 1 root root    182 jun 28 09:55 ssh_host_ecdsa_key.pub
--rw------- 1 root root    411 jun 28 09:55 ssh_host_ed25519_key
--rw-r--r-- 1 root root    102 jun 28 09:55 ssh_host_ed25519_key.pub
--rw------- 1 root root    985 jun 28 09:55 ssh_host_key
--rw-r--r-- 1 root root    650 jun 28 09:55 ssh_host_key.pub
--rw------- 1 root root   1679 jun 28 09:55 ssh_host_rsa_key
--rw-r--r-- 1 root root    402 jun 28 09:55 ssh_host_rsa_key.pub
-```
+![](img/19.png)
 
-* Modificar el fichero de configuración SSH (`/etc/ssh/sshd_config`) para dejar una única línea: `HostKey /etc/ssh/ssh_host_rsa_key`. Comentar el resto de líneas con configuración HostKey.
-Este parámetro define los ficheros de clave publica/privada que van a identificar a nuestro servidor. Con este cambio decimos que sólo se van a utilizar las claves del tipo RSA.
+* Vamos a modificar el fichero de configuración SSH (`/etc/ssh/sshd_config`) para dejar una única línea: `HostKey /etc/ssh/ssh_host_rsa_key`. Comentamos el resto de líneas con configuración HostKey. Este parámetro define los ficheros de clave publica/privada que van a identificar a nuestro servidor. Con este cambio decimos que sólo se van a utilizar las claves del tipo RSA.
+
+![](img/20.png)
 
 ## 3.1 Regenerar certificados
 
-Vamos a cambiar o volver a generar nuevas claves públicas/privadas que identifican nuestro servidor.
-* Ir al servidor.
-* Como usuario root ejecutamos: `ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key`. ¡OJO! No poner password al certificado.
-* Reiniciar el servicio SSH: `systemctl restart sshd`.
-* Comprobar que el servicio está en ejecución correctamente: `systemctl status sshd`
+Una vez editado el fichero de configuración, generamos nuevas claves públicas/privadas que identifican nuestro servidor con `ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key`.
+
+![](img/21.png)
+
+Para que los cambios surtan efecto, reiniciamos el servicio SSH y comprobamos que está en ejecución correctamente:
+
+![](img/22.png)
 
 ## 3.2 Comprobamos
 
-* Comprobar qué sucede al volver a conectarnos desde los dos clientes, usando los  usuarios `1er-apellido-alumno2` y `1er-apellido-alumno1`. ¿Qué sucede?
+* Comprobamos que, ahora, al intentar conectarnos por SSH nos salta un error dado que la clave pública ha cambiado. En el propio mensaje de error tenemos la forma de arreglarlo; ejecutar el comando ``ssh-keygen -R server20g -f /home/alejandro/.ssh/known_hosts`. Esto básicamente borra la clave pública que tenemos del server20g para generar una nueva cuando volvamos a realizar la conexión:
 
-> **Enlaces de interés**
->
-> Cliente SSH para Windows:
->
-> * [Learning Linux : Lesson 14 Using Public key Authentication with PuTTY ](https://youtu.be/xe599gD4b5E?list=PL3E447E094F7E3EBB)
->
-> Servicio SSH en Windows:
->
-> * [Tutorial FreeSShd](http://www.redeszone.net/windows/freesshd-para-windows-instalacion-y-manual-de-configuracion-de-freesshd-para-windows-servidor-ssh-y-sftp/)
-> * [Configuración de OpenSSH para Windows7 con SSH Cygwin +Putty](http://www.taringa.net/post/linux/15562479/Configuracion-de-OpenSSH-en-Windows-7-SSH-Cygwin-Putty.html)
-> * [Installing Cygwin and Starting the SSH Daemon](http://docs.oracle.com/cd/E24628_01/install.121/e22624/preinstall_req_cygwin_ssh.htm#EMBSC150)
-> * En Windows, la información relativa a los know_hosts, se almacena en el registro. En la ruta `HKEY_CURRENT_USER/Software/SimonTaham/Putty/SSHHostKeys`. Para acceder al registro ejecutamos el comando `regedit`.
+![](img/23.png)
 
-* Para solucionarlo... lee los mensajes de advertencia. ¡Ahí está todo lo que necesitas!
+![](img/25.png)
+
+* Si ahora realizamos la conexión de nuevo, añadirá la nueva clave pública al fichero `known_hosts`:
+
+![](img/24.png)
+
+* En Windows, sin embargo, esto se realizará automáticamente. Si tratamos de realiza la conexión nos dirá que la clave pública ha cambiado y nos pedirá permiso para actualizarla.
+
+![](img/26.png)
 
 ---
 # 4. Personalización del prompt Bash
 
-* Por ejemplo, podemos añadir las siguientes líneas al fichero de configuración del `1er-apellido-alumno1` en la máquina servidor (Fichero `/home/1er-apellido-alumno1/.bashrc`)
+* Podemos personalizar el terminal que nos aparece al realizar el SSH. Por ejemplo, podemos añadir las siguientes líneas al fichero de configuración del usuario `depaz1` en la máquina servidor (Fichero `/home/depaz1/.bashrc`)
 
-```
-# Se cambia el prompt al conectarse vía SSH
+![](img/27.png)
 
-if [ -n "$SSH_CLIENT" ]; then
-   PS1="AccesoRemoto_\e[32m\u@\h:\e[0m \w\a\$ "
-else
-   PS1="\[$(pwd)\]\u@\h:\w>"
-fi
-```
+* Además, creamos el fichero `/home/depaz1/.alias`, donde pondremos el siguiente contenido. Esto nos permitirá asignar un alias a cada comando para usarlos con mayor comodidad:
 
-* Además, crear el fichero el fichero `/home/1er-apellido-alumno1/.alias`,
-donde pondremos el siguiente contenido:
+![](img/28.png)
 
-```
-alias c='clear'
-alias g='geany'
-alias p='ping'
-alias v='vdir -cFl'
-alias s='ssh'
-```
+* Si ahora accedemos por SSH al servidor con el usuario `depaz1` tendremos lo siguiente:
 
-* Comprobar funcionamiento de la conexión SSH desde cada cliente.
+![](img/29.png)
+
+![](img/30.png)
+
+![](img/31.png)
 
 ---
 # 5. Autenticación mediante claves públicas
