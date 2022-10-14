@@ -136,7 +136,7 @@ Para que los cambios surtan efecto, reiniciamos el servicio SSH y comprobamos qu
 
 ## 3.2 Comprobamos
 
-* Comprobamos que, ahora, al intentar conectarnos por SSH nos salta un error dado que la clave pública ha cambiado. En el propio mensaje de error tenemos la forma de arreglarlo; ejecutar el comando ``ssh-keygen -R server20g -f /home/alejandro/.ssh/known_hosts`. Esto básicamente borra la clave pública que tenemos del server20g para generar una nueva cuando volvamos a realizar la conexión:
+* Comprobamos que, ahora, al intentar conectarnos por SSH nos salta un error dado que la clave pública ha cambiado. En el propio mensaje de error tenemos la forma de arreglarlo; ejecutar el comando `ssh-keygen -R server20g -f /home/alejandro/.ssh/known_hosts`. Esto básicamente borra la clave pública que tenemos del server20g para generar una nueva cuando volvamos a realizar la conexión:
 
 ![](img/23.png)
 
