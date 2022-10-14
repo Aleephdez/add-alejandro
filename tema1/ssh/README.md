@@ -9,6 +9,7 @@ Nombre      : Alejandro de Paz Hernández
 ## Introducción
 
 SSH es el nombre del protocolo y del programa que nos permite acceder de forma remota a una máquina por medio de un canal seguro en el que toda la información está cifrada. También permite copiar datos de forma segura, gestionar claves RSA y, en general, pasar datos y tráfico entre dos máquinas. En esta práctica, vamos a utilizar el SSH en dos entornos servidor-cliente, uno en Winodws y otro en OpenSuse.
+
 ---
 # 1. Preparativos
 
@@ -171,63 +172,59 @@ Para que los cambios surtan efecto, reiniciamos el servicio SSH y comprobamos qu
 ---
 # 5. Autenticación mediante claves públicas
 
-**Explicación:**
+El objetivo de este apartado es el de configurar SSH para poder acceder desde el `client20g` sin necesidad de escribir la clave. Usaremos un par de claves pública/privada.
 
-El objetivo de este apartado es el de configurar SSH para poder acceder desde el `clientXXg` sin necesidad de escribir la clave. Usaremos un par de claves pública/privada.
+Para ello, vamos a configurar la autenticación mediante clave pública para acceder con nuestro usuario personal desde el equipo cliente al servidor con el usuario `depaz4`.
 
-Para ello, vamos a configurar la autenticación mediante clave pública para acceder con nuestro usuario personal desde el equipo cliente al servidor con el usuario `1er-apellido-alumno4`. Vamos a verlo.
+* Iniciamos sesión con el usuario **alejandro** de la máquina `client20g` y ejecutamos `ssh-keygen -t rsa` para generar un nuevo par de claves para el usuario en:`/home/alejandro/.ssh/id_rsa` y `/home/alejandro/.ssh/id_rsa.pub`.
 
-**Práctica**
+![](img/32.png)
 
-Capturar imágenes de los siguientes pasos:
-* Vamos a la máquina `clientXXg`.
-* **¡OJO! No usar el usuario root**.
-* Iniciamos sesión con nuestro el usuario **nombre-alumno** de la máquina `clientXXg`.
-* `ssh-keygen -t rsa` para generar un nuevo par de claves para el usuario en:
-    * `/home/nombre-alumno/.ssh/id_rsa`
-    * `/home/nombre-alumno/.ssh/id_rsa.pub`
-* Ahora vamos a copiar la clave pública (`id_rsa.pub`), al fichero "authorized_keys" del usuario remoto *1er-apellido-alumno4* que está definido en el servidor. Hay varias formas de hacerlo.
-    * El modo recomendado es usando el comando `ssh-copy-id`. Ejemplo para copiar la clave pública del usuario actual al usuario remoto en la máquina remota: `ssh-copy-id 1er-apellido-alumno4@serverXXg`.
+* Ahora vamos a copiar la clave pública (`id_rsa.pub`), al fichero "authorized_keys" del usuario remoto *depaz4* que está definido en el servidor. La forma más fácil y rápida de hacerlo es haciendo `ssh-copy-id depaz4@server20g`.
 
-> Otra forma de hacerlo sería usando el programa de copia segura `scp`.
->
-> * Comprobar que existe el directorio `/home/1er-apellido-alumno4/.ssh` en el servidor.
-> * Copiamos el fichero `.ssh/id_rsa.pub` local al fichero `.ssh/authorized_keys` del usuario remoto en la máquina remota.
+![](img/33.png)
 
-* Comprobar que ahora al acceder remotamente vía SSH
-    * Desde `clientXXg`, NO se pide password.
-    * Desde `clientXXw`, SI se pide el password.
+* Comprobamos que ahora al acceder remotamente vía SSH
+    * Desde `client20g`, no se pide password con el usuario `depaz4` pero sí con el usuario `depaz1`.
+
+    ![](img/33.png)
+
+    * Desde `client20w`, sí se pide el password con `depaz4`.
+
+    ![](img/34.png)
 
 ---
 # 6. Uso de SSH como túnel para X
 
-![tunel](./images/ssh-tunel.jpeg)
+Vamos a utilizar el SSH como túnel para ejecutar aplicaciones de forma remota desde el cliente.
 
-> Enlaces de interés:
->
-> * http://dustwell.com/how-x-over-ssh-really-works.html
-> * http://www.vanemery.com/Linux/XoverSSH/X-over-SSH2.html
+* Instalamos en el servidor una aplicación de entorno gráfico que no esté en los clientes, en este caso instalaremos Geany.
 
-* Instalar en el servidor una aplicación de entorno gráfico (APP1) que no esté en los clientes. Por ejemplo Geany. Si estuviera en el cliente entonces buscar otra aplicación o desinstalarla en el cliente.
-* Modificar servidor SSH para permitir la ejecución de aplicaciones gráficas, desde los clientes. Consultar fichero de configuración `/etc/ssh/sshd_config` (Opción `X11Forwarding yes`)
-* Reiniciar el servicio SSH para que se lean los cambios de configuración.
+![](img/37.png)
 
-Vamos a clientXXg.
-* `zypper se geany`,comprobar que no está instalado el programa.
-* Vamos a comprobar desde clientXXg, que funciona "geany" (del servidor).
-    * `ssh -X primer-apellido-alumno1@serverXXg`, nos conectamos de forma remota al servidor, y ahora ejecutamos "geany" de forma remota.
-    * **¡OJO!** El parámetro es `-X` en mayúsculas, no minúsculas.
+* Modificamos servidor SSH para permitir la ejecución de aplicaciones gráficas desde los clientes. Para ello vamos al fichero de configuración `/etc/ssh/sshd_config` y nos aseguramos de que exista la siguiente línea: `X11Forwarding yes`.
+
+![](img/36.png)
+
+* Reiniciamos el servicio SSH para que se lean los cambios de configuración.
+
+* Vamos a cliente20g y nos conectamos por SSH con el parámetro *-X*, que nos permitirá la ejecución de apliciones: `ssh -X depaz1@server20g`. A continuación, ejecutamos geany.
+    
+![](img/38.png)
+
+* En caso de que el paso anterior nos de error (*X11Forwarding failed*), es posible que sea debido a no tener instalado XAuth en el servidor, así que lo instalamos:
+
+![](img/39(2).png)
+
+* Si lo anterior no funciona, podemos hacer el SSH con el parámetro *-v* añadido para activar el modo debug y ver qué error nos está dando exactamente.
 
 ---
 # 7. Aplicaciones Windows nativas
 
 Podemos tener aplicaciones Windows nativas instaladas en ssh-server mediante el emulador WINE.
-* Instalar emulador Wine en el `serverXXg`.
-* Ahora podríamos instalar alguna aplicación de Windows en el servidor SSH usando el emulador Wine. O podemos usar el Block de Notas que viene con Wine: wine notepad.
-* Comprobar el funcionamiento del programa en serverXXg.
-* Comprobar funcionamiento del programa, accediendo desde clientXXg.
+* Instalamos el emulador Wine en el `server20g` y comprobamos su funcionamiento en `cliente20g` con la aplicación NotePad, que viene instalada por defecto con Wine:
 
-> En este caso hemos conseguido implementar una solución similar a RemoteApps usando SSH.
+![](img/39.png)
 
 ---
 # 8. Restricciones de uso
@@ -238,102 +235,90 @@ Vamos a modificar los usuarios del servidor SSH para añadir algunas restriccion
 
 Vamos a crear una restricción de uso del SSH para un usuario:
 
-* En el servidor tenemos el usuario `primer-apellido2`. Desde local en el servidor podemos usar sin problemas el usuario.
-* Vamos a modificar SSH de modo que al usar el usuario por SSH desde los clientes tendremos permiso denegado.
+* En el servidor tenemos el usuario `depaz2`. Desde el servidor podemos usar sin problemas el usuario, pero vamos a modificar el SSH de modo que al usar el usuario desde los clientes tendremos permiso denegado.
 
-Capturar imagen de los siguientes pasos:
-* Consultar/modificar fichero de configuración del servidor SSH (`/etc/ssh/sshd_config`) para restringir el acceso a determinados usuarios. Consultar las opciones `AllowUsers`, `DenyUsers` (Más información en: `man sshd_config`)
-* `/usr/sbin/sshd -t; echo $?`, comprobar si la sintaxis del fichero de configuración del servicio SSH es correcta (Respuesta 0 => OK, 1 => ERROR).
-* Comprobarlo la restricción al acceder desde los clientes.
+* Modificamos el fichero de configuración del servidor SSH (`/etc/ssh/sshd_config`) para restringir el acceso a determinados usuarios utilizando la sentencia `DenyUsers`:
+
+![](img/40.png)
+
+* Compilamos el fichero anterior para comprobar si existe algún error. Si la salida es 0 es que ha ido todo bien.:
+
+![](img/41.png)
+
+* Comprobamos la restricción al acceder desde los clientes:
+
+![](img/42.png)
+
+![](img/43.png)
+
+* Vemos que nos deniega el acceso e incluso rechaza la conexión SSH después de muchos intentos de inicio de sesión.
 
 ## 8.2 Restricción sobre una aplicación
 
 Vamos a crear una restricción de permisos sobre determinadas aplicaciones.
 
-* Crear grupo `remoteapps`
-* Incluir al usuario `1er-apellido-alumno4` en el grupo `remoteapps`.
-* Localizar un programa (Por ejemplo "geany"). Posiblemente tenga permisos 755.
-* Poner al programa el grupo propietario "remoteapps".
-* Poner los permisos del ejecutable del programa a 750. Para impedir que los usuarios que no pertenezcan al grupo puedan ejecutar el programa.
-* Comprobamos el funcionamiento en el servidor en local.
-* Comprobamos el funcionamiento desde el cliente en remoto (Recordar `ssh -X ...`).
+* Creamos el grupo `remoteapps` e incluimos al usuario `depaz4` en dicho grupo.
+
+![](img/44.png)
+
+![](img/45.png)
+
+* Buscamos la ruta del programa `geany` y hacemos al grupo `remoteapps` propietario del programa. Acto seguido, le damos los permisos 750 al ejecutable para que solo lo puedan ejecutar los usuarios que pertenezcan al grupo `remoteapps`.
+
+![](img/46.png)
+
+![](img/47.png)
+
+* Desde el servidor no nos dejará ejecutarlo de ninguna forma puesto que no tenemos interfaz gráfica, asi que utilizaremos un cliente. Al entrar con el usuario `depaz1` vemos que no tenemos permiso para ejecutarlo:
+
+![](img/48.png)
+
+* Sin embargo, con el usuario `depaz4` sí que podremos:
+
+![](img/49.png)
 
 ---
 # 9. Servidor SSH en Windows
 
-* Configurar el servidor Windows con los siguientes valores:
-    * SO Windows Server
-    * Nombre de equipo: `serverXXs`
-    * [Configuración de las MV's](../../global/configuracion/windows-server.md)
-* Añadir en `C:\Windows\System32\drivers\etc\hosts` el equipo clientXXg y clientXXw.
-* Comprobar haciendo ping a ambos equipos.
-* [Instalar y configurar el servidor SSH en Windows](../../global/acceso-remoto/windows-ssh.md).
-    * Elegir la opción que se quiera: OpenSSH o integrado.
-    * Documentar el proceso de instalación y configuración.
-* Comprobar acceso SSH desde los clientes Windows y GNU/Linux al servidor SSH Windows.
-    * `netstat -n` en Windows.
-    * `lsof -i -nP` en GNU/Linux.
+* Para este último apartado utilizaremos una máquina Windows Server 2016 con configuración básica.
+* Añadimos en `C:\Windows\System32\drivers\etc\hosts` el equipo client20g y client20w.
 
-> Enlaces de interés:
->
-> * [Vídeo: Instalación y configuración de un servidor SSH en Windows Server](http://www.youtube.com/embed/QlqokjKt69I)
+![](img/50.png)
 
-# 10. Extras: otras aplicaciones relacionadas
+* Ahora tendremos que instalar sl servidor SSH. Para ello existen dos opciones, el integrado o el programa OpenSSH. Instalaremos el segundo, puesto que es más sencillo. Descargamos el .zip desde el GitHub oficial de OpenSSH y, si es la versión de 32 bits la descomprimimos en `Archivos de Programa(x86)`. Si es la versión de 64 bits, en `Archivos de Programa`, aunque esto no debería afectar al funcionamiento del programa. 
 
-## 10.1 ClusterSSH
+![](img/53.png)
 
-Es una herramienta para hacer múltiples conexiones remotas SSH en paralelo. Facilita trabajar con muchas máquinas al mismo tiempo.
+* En caso de que la descarga nos de error, tendremos que habilitarlas en los ajustes del navegador:
 
-> Enlace de interés:
-> * https://www.putorius.net/cluster-ssh.html
+![](img/51.png)
 
-* Trabajaremos en grupos de 2.
-* Crear usuario `invitadoAABB` en todas las máquinas.
-    * Donde AA es el id del alumno 01
-    * Donde BB es el id del alumno 02
-* Instalar ClusterSSH en la máquina que servirá de controlador.
-* Aplicar algún cambio masivo usando `cssh`.
+Una vez descomprimido el .zip, tendremos que ir a PowerShell para realizar la instalación. 
 
-## 10.1 Netcat
+* Lo primero es ejecutar el script para instalar los servicios `sshd` y `ssh-agent` y comprobar que todo ha ido bien.
 
-> Enlaces de interés:
-> * [Usos del comando ncat cpn ejemplos](https://www.ochobitshacenunbyte.com/2021/11/04/uso-del-comando-ncat-nc-en-linux-con-ejemplos/)
+![](img/54.png)
 
-* Trabajaremos en grupos de 2.
-* Instalar NetCat en 2 máquinas diferentes.
-* Invocar nc con los parámetros adecuados para establecer conexión remota.
+![](img/55.png)
 
----
+* Generamos las claves del servidor:
 
-# ANEXO A
+![](img/56.png)
 
-# Setup Passwordless SSH Login for Multiple Remote Servers Using Script
+* Habilitamos el SSH en el firewall y configuramos los servicios SSH para que se inicien automáticamente:
 
-https://www.tecmint.com/passwordless-ssh-login-for-multiple-remote-servers/
+![](img/57.png)
 
-## SSH cipher
+* Ahora podremos acceder de forma remota a la máquina Windows Server. Comprobamos:
 
-https://answers.launchpad.net/ubuntu/+source/openssh/+question/669164
+    * Desde `cliente20g`:
 
-## Túnel Inverso SSH - mundohackers
+    ![](img/59.png)
 
-* [Cómo hacer un túnel inverso SSH](https://mundo-hackers.weebly.com/tuacutenel-inverso-ssh.html#)
-* [Un bruto con Debian: Tunel inverso SSH](https://unbrutocondebian.blogspot.com/2013/08/tunel-inverso-ssh.html?m=1)
+    ![](img/58.png)
 
-## Trabajo colaborativo usando SSH
+    * Desde `cliente20w`:
 
-Podemos seguir esta recomendación para que varias personas trabajen en la misma máquina.
+    ![](img/60.png)
 
-Supongamos que tenemos 2 máquinas llamadas MV1 y MV2.
-* En MV1 instalamos el servidor SSH.
-* En MV1 tenemos los usuarios usu1 y usu2.
-* Desde MV2 para conectarse a MV1 debemos hacer: ssh usu2@ip-mv1. Con esto abrimos sesión en MV1 desde MV2 y podemos trabajar desde MV2.
-
-Si queremos abrir una sesión remota pero gráfica podemos hacer en MV2:
-* ssh -X usu2@ip-mv1 (Es es para abrir la sesión. Establecer contacto)
-* nautilus (Con esto abrimos un explorador en MV1 pero desde MV2)
-* Si tenemos el programa LibreOffice instalado en MV1, pero no en MV2... podemos conectarnos con ssh -X, y luego ejecutar... /usr/lib/libreoffice/program/soffice.bin, y ya está. Esto es trabajo remoto.
-
-Si queremos copiar archivo de MV2 hacia MV1 hacemos:
-* scp file usu2@ip-m1:/home/usu2, Ya está!
-* Si además queremos iniciar una sesión sftp hacemos: sftp usu2@ip-m1
+    ![](img/61.png)
