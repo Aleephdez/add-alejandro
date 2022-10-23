@@ -166,8 +166,8 @@ Desde un cliente Windows vamos a acceder a los recursos compartidos del servidor
 
 > NOTA: las carpetas y ficheros que aparecen son los creados más adelante desde el cliente OpenSUSE.
 
-    * `net use` para ver las conexiones abiertas desde un terminal con nuestro usuario normal.
-    * `net use * /d /y`, para borrar todas las conexión SMB/CIFS que se hayan realizado desde un terminal con nuestro usuario normal. Esto es necesario, ya que si no lo hacemos no podremos acceder a otro recurso. Windows no permite la conexión de múltiples usuarios a la vez.
+* `net use` para ver las conexiones abiertas desde un terminal con nuestro usuario normal.
+* `net use * /d /y`, para borrar todas las conexión SMB/CIFS que se hayan realizado desde un terminal con nuestro usuario normal. Esto es necesario, ya que si no lo hacemos no podremos acceder a otro recurso. Windows no permite la conexión de múltiples usuarios a la vez.
 
    ![](img/41.png)
 
