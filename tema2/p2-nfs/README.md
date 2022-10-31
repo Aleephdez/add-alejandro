@@ -185,7 +185,7 @@ Probamos a crear ficheros y directorios en los recursos montados:
 
 ## 5.3 Montaje automático
 
-> Acabamos de acceder a recursos remotos, realizando un montaje de forma manual (comandos mount/umount).
+Acabamos de acceder a recursos remotos, realizando un montaje de forma manual (comandos mount/umount).
 Si reiniciamos el equipo cliente, podremos ver que los montajes realizados de forma manual
 ya no están. Si queremos volver a acceder a los recursos remotos debemos repetir el proceso,
 a no ser que hagamos una configuración permanente o automática.
