@@ -207,14 +207,14 @@ ello, vamos utilizar Yast. Nos vamos a `Yast -> Particionador -> NFS -> Añadir`
 
 Sí, puede. Podemos ver los recursos y montarlos:
 
-    ![](img/39.png)
+![](img/39.png)
 
-    ![](img/40.png)
+![](img/40.png)
 
 * ¿Nuestro cliente Windows NFS podría acceder al servidor GNU/Linux NFS? Comprobarlo.
 
 Sí, al igual que en el caso anterior, también se puede:
 
-    ![](img/41.png)
+![](img/41.png)
 
-    ![](img/42.png)
+![](img/42.png)
