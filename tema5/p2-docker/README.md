@@ -349,7 +349,6 @@ Este script muestra varios mensajes por pantalla al ejecutarse.
 
 Analizar y entender el siguiente Dockerfile (https://github.com/pausoft/docker)
 * Explicar qué utilidad tiene y cómo lo hace.
-
 
 # 6. Limpiar contene
 
