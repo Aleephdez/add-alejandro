@@ -98,16 +98,19 @@ Ahora estamos dentro del contenedor, y vamos a personalizarlo a nuestro gusto:
 
 **Instalar aplicaciones dentro del contenedor**
 
+* Realizamos una actualización de paquetes con `apt update`:
 
 ![](img/9.png)
 
-**Crear un fichero HTML** `holamundo1.html`.
+* Instalamos nginx (`apt install nginx`) y el editor nano (`apt install nano`)
+
+**Creamos un fichero HTML** `holamundo1.html`.
 
 ```
-root@IDContenedor:/# echo "<p>Hola nombre-del-alumno</p>" > /var/www/html/holamundo1.html
+root@IDContenedor:/# echo "<p>Hola Alejandro</p>" > /var/www/html/holamundo1.html
 ```
 
-**Crear un script** `/root/server.sh` con el siguiente contenido:
+**Creamos un script** `/root/server.sh` con el siguiente contenido:
 
 ![](img/10.png)
 
@@ -121,7 +124,7 @@ root@IDContenedor:/# echo "<p>Hola nombre-del-alumno</p>" > /var/www/html/holamu
 Ya tenemos nuestro contenedor auto-suficiente de Nginx, ahora vamos a crear una nueva imagen que incluya los cambios que hemos hecho.
 
 * Abrir otra ventana de terminal.
-* `docker commit app1debian nombre-del-alumno/nginx1`, a partir del contenedor modificado vamos a crear la nueva imagen que se llamará "nombre-del-alumno/nginx1".
+* `docker commit app1debian alejandro/nginx1`, a partir del contenedor modificado vamos a crear la nueva imagen que se llamará "alejandro/nginx1".
 
 ![](img/11.png)
 
@@ -137,8 +140,8 @@ Ya tenemos nuestro contenedor auto-suficiente de Nginx, ahora vamos a crear una 
 
 ## 3.1 Crear contenedor con Nginx
 
-Ya tenemos una imagen "nombre-alumno/nginx" con Nginx preinstalado dentro.
-* `docker run --name=app2nginx1 -p 80 -t nombre-alumno/nginx1 /root/server.sh`, iniciar el contenedor a partir de la imagen anterior.
+Ya tenemos una imagen "alejandro/nginx" con Nginx preinstalado dentro.
+* `docker run --name=app2nginx1 -p 80 -t alejandro/nginx1 /root/server.sh`, iniciar el contenedor a partir de la imagen anterior.
 
 > El argumento `-p 80` le indica a Docker que debe mapear el puerto especificado del contenedor, en nuestro caso el puerto 80 es el puerto por defecto sobre el cual se levanta Nginx.
 
@@ -161,17 +164,11 @@ Como ya tenemos una imagen docker con Nginx (Servidor Web), podremos crear nuevo
 
 ## 3.3 Migrar la imagen a otra máquina
 
-¿Cómo puedo llevar los contenedores Docker a un nuevo servidor?
+Podemos exportar nuestra imagen a otra máquina de la siguiente forma:
 
-> Enlaces de interés
->
-> * https://www.odooargentina.com/forum/ayuda-1/question/migrar-todo-a-otro-servidor-imagenes-docker-397
-> * http://linoxide.com/linux-how-to/backup-restore-migrate-containers-docker/
-
-**Exportar** imagen Docker a fichero tar:
 * `docker save -o alejandro.tar alejandro/nginx1`, guardamos la imagen "alejandro/nginx1" en un fichero tar.
 
-Intercambiar nuestra imagen exportada con la de un compañero de clase.
+Intercambiamos nuestra imagen exportada con la de un compañero de clase.
 
 **Importar** imagen Docker desde fichero:
 * Coger la imagen de un compañero de clase.
@@ -293,7 +290,7 @@ El ejemplo anterior donde creábamos una imagen Docker con Nginx, pero esto se p
 | --name               | Nombre del nuevo contenedor |
 | -p                   | Redirección de puertos |
 |                      | Se expone el puerto 80 del contenedor por le puerto 8083 de la máquina anfitrión |
-| nombre-alumno/nginx3 | Imagen que se usará para crear el contenedor |
+| alejandro/nginx3 | Imagen que se usará para crear el contenedor |
 
 * Comprobar el acceso a "holamundo3.html".
 
@@ -313,7 +310,7 @@ Crear nuestra imagen "holamundo":
 ```
 #!/bin/sh
 echo "Hola Mundo!"
-echo "nombre-del-alumnoXX"
+echo "alejandroXX"
 echo "Proyecto dockerXXpush"
 date
 ```
