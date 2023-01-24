@@ -189,32 +189,17 @@ usando un fichero de configuración. Esto es, vamos a crear un contenedor a part
 
 ## 3.1 Preparar ficheros
 
-* Crear directorio `/home/alejandro/docker20local`.
-* Entrar el directorio anterior.
-* Crear fichero `holamundo2.html` con el siguiente contenido:
+* Creamos el directorio `/home/alejandro/docker20local` y entramos.
+
+* Creamos un fichero `holamundo2.html` con el siguiente contenido:
 ```
 Proyecto : docker20local
 Autor    : Alejandro
 Fecha    : 19-01-23
 ```
-* Crear el fichero `Dockerfile` con el siguiente contenido:
+* Creamos el fichero `Dockerfile` con el siguiente contenido:
 
-```
-FROM debian
-
-MAINTAINER alejandro20 1.0
-
-RUN apt update
-RUN apt install -y apt-utils
-RUN apt install -y nginx
-
-COPY holamundo2.html /var/www/html
-RUN chmod 666 /var/www/html/holamundo2.html
-
-EXPOSE 80
-
-CMD ["/usr/sbin/nginx", "-g", "daemon off;"]
-```
+![](img/31.png)
 
 Descripción de los parámetros del Dockerfile:
 
