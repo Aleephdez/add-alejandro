@@ -330,9 +330,12 @@ Este script muestra varios mensajes por pantalla al ejecutarse.
 ## 5.3 Analizar y entender
 
 Analizar y entender el siguiente Dockerfile (https://github.com/pausoft/docker)
-* Explicar qué utilidad tiene y cómo lo hace.
 
-# 6. Limpiar contene
+* Explicar qué utilidad tiene y cómo lo hace:
+
+Este Dockerfile crea un contenedor a partir de una imagen de Debian e instala los paquetes necesarios para descargar una canción y reproducirla. Copia esa canción en un directorio aparte e inicia el contenedor en ese directorio. Finalmente, la reproduce al iniciar el contenedor.
+
+# 6. Limpiar contenedores
 
 Cuando terminamos con los contenedores, y ya no lo necesitamos, es buena idea pararlos y/o destruirlos.
 
